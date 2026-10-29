@@ -1,7 +1,49 @@
-const API_URL = "http://127.0.0.1:8080";
+const API_URL = "http://127.0.0.1:8000";
 
-export async function fetchTasks() {
-  const response = await fetch(`${API_URL}/tasks`);
+export class ApiError extends Error {
+  constructor(status, message, errors = []) {
+    super(message);
+    this.status = status;
+    this.errors = errors;
+  }
+}
+
+async function request(path, options = {}) {
+  const response = await fetch(`${API_URL}${path}`, options);
+  if (!response.ok) {
+    const problem = await response.json().catch(() => null);
+    throw new ApiError(
+      response.status,
+      problem?.detail ?? response.statusText,
+      problem?.errors ?? [],
+    );
+  }
+  return response;
+}
+
+export async function fetchTasks({ projectId, status }) {
+  const params = new URLSearchParams({ project_id: projectId });
+  if (status) {
+    params.set("status", status);
+  }
+  const response = await request(`/tasks?${params}`);
   const data = await response.json();
-  return data.items;
+  return {
+    items: data.items,
+    totalHeader: response.headers.get("X-Total-Count"),
+  };
+}
+
+
+export async function createTask(task) {
+  const response = await request("/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(task),
+  });
+  return response.json();
+}
+
+export async function deleteTask(taskId) {
+  await request(`/tasks/${taskId}`, { method: "DELETE" });
 }

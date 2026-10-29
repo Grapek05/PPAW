@@ -1,19 +1,9 @@
 [project]
 name = "taskboard"
 version = "0.1.0"
-description = "Add your description here"
+description = "System zarzadzania projektami i zadaniami"
 readme = "README.md"
-authors = [
-    { name = "Tomasz Grapatyn", email = "student@example.com" }
-]
 requires-python = ">=3.14"
 dependencies = [
-    "fastapi[standard]>=0.143.0",
+    "fastapi[standard]>=0.141.1",
 ]
-
-[project.scripts]
-taskboard = "taskboard:main"
-
-[build-system]
-requires = ["uv_build>=0.12.23,<0.13.0"]
-build-backend = "uv_build"
