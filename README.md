@@ -33,7 +33,6 @@ wpisany w konfiguracji CORS. Adres `http://localhost:5500` jest innym origin.
 - Odwołanie w ciele żądania do nieistniejącego projektu lub użytkownika to 422, a nie 404.
 - Wszystkie błędy mają format Problem Details (RFC 9457).
 
-
 ## Frontend
 
 | Plik | Odpowiedzialnosc |

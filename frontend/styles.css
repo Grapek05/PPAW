@@ -108,6 +108,7 @@ button:disabled {
   padding: 0.5rem 0.75rem;
   border-radius: var(--radius);
   color: var(--color-muted);
+  white-space: pre-line;
 }
 
 .message-error {

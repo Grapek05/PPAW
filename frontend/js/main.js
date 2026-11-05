@@ -15,9 +15,15 @@ const reloadButton = document.querySelector("#reload-button");
 const statusFilter = document.querySelector("#status-filter");
 const taskList = document.querySelector("#task-list");
 
+const PROJECT_ID = 1;
+
 function describeError(error) {
   if (error instanceof ApiError) {
-    return `Serwer odrzucił żądanie (${error.status}): ${error.message}`;
+    const details = error.errors
+      .map(({ field, message }) => `${field}: ${message}`)
+      .join("\n");
+    const summary = `Serwer odrzucił żądanie (${error.status}): ${error.message}`;
+    return details ? `${summary}\n${details}` : summary;
   }
   return "Brak połączenia z API. Sprawdź, czy serwer działa.";
 }
@@ -25,7 +31,10 @@ function describeError(error) {
 async function loadTasks() {
   showListLoading();
   try {
-    const { items, totalHeader } = await fetchTasks(statusFilter.value);
+        const { items, totalHeader } = await fetchTasks({
+      projectId: PROJECT_ID,
+      status: statusFilter.value,
+    });
     renderTasks(items);
     renderTotal(totalHeader);
     hideListStatus();
@@ -41,6 +50,7 @@ form.addEventListener("submit", async (event) => {
   submitButton.disabled = true;
   try {
     await createTask({
+      project_id: PROJECT_ID,
       title: data.get("title"),
       priority: data.get("priority"),
     });

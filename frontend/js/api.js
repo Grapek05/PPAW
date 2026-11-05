@@ -34,7 +34,6 @@ export async function fetchTasks({ projectId, status }) {
   };
 }
 
-
 export async function createTask(task) {
   const response = await request("/tasks", {
     method: "POST",
